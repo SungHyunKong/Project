@@ -14,64 +14,47 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class StuForm  extends JFrame {
+	
+	StuForm(){
+		JPanel p = new JPanel();
+		
+		JLabel la1 = new JLabel("     학번");
+		JLabel la2 = new JLabel("국어점수");
+		JLabel la3 = new JLabel("영어점수");
+		JLabel la4 = new JLabel("수학점수");
+		
+		JTextField text1 = new JTextField(10);
+		JTextField text2 = new JTextField(10);
+		JTextField text3 = new JTextField(10);
+		JTextField text4 = new JTextField(10);
+		JTextArea tea = new JTextArea();
+		
+		la1.setBounds(40, 75, 60, 60);
+		la2.setBounds(40, 175, 60, 60);
+		la3.setBounds(40, 275, 60, 60);
+		la4.setBounds(40, 375, 60, 60);
+		text1.setBounds(100, 90, 125, 25);
+		text2.setBounds(100, 190, 125, 25);
+		text3.setBounds(100, 290, 125, 25);
+		text4.setBounds(100, 390, 125, 25);
+		add(la1);
+		add(la2);
+		add(la3);
+		add(la4);
+		add(text1);
+		add(text2);
+		add(text3);
+		add(text4);
+		add(p);
+		
+		setTitle("성적관리프로그램");
+		setSize(600,700);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+	}
+	
 	public static void main(String[] args) {
-		JFrame frame = new JFrame("성적관리 프로그램");
-		Container contenpane = frame.getContentPane();
-		GridLayout grid = new GridLayout(4,2);
-		GridLayout grid2 = new GridLayout(2,1);
-		FlowLayout flow = new FlowLayout();
-		frame.setLocation(500, 400);
-		frame.setPreferredSize(new Dimension(500, 800));
-		JPanel panel1 = new JPanel();
-		JPanel panel2 = new JPanel();
-		JPanel panel3 = new JPanel();
-		JPanel panel4 = new JPanel();
-		JLabel label1 = new JLabel("학번");
-		JTextField tef1 = new JTextField(10);
-		JLabel label2 = new JLabel("국어");
-		JTextField tef2 = new JTextField(10);
-		JLabel label3 = new JLabel("영어");
-		JTextField tef3 = new JTextField(10);
-		JLabel label4 = new JLabel("수학");
-		JTextField tef4 = new JTextField(10);
-		JLabel label5 = new JLabel("학번 국어 영어 수학");
-		JTextField tef5 = new JTextField(10);
-		JButton btn1 = new JButton("입력");
-		JButton btn2 = new JButton("출력");
-		JButton btn3 = new JButton("순위");
-		JButton btn4 = new JButton("파일저장");
-		JButton btn5 = new JButton("파일로딩");
-		panel1.setLayout(grid);
-		panel1.add(label1);
-		panel1.add(tef1);
-		panel1.add(label2);
-		panel1.add(tef2);
-		panel1.add(label3);
-		panel1.add(tef3);
-		panel1.add(label4);
-		panel1.add(tef4);
-		panel2.add(label5);
-		panel3.add(btn1);
-		panel3.add(btn2);
-		panel3.add(btn3);
-		panel3.add(btn4);
-		panel3.add(btn5);
-		panel4.add(tef5);
-		
-		panel2.setLayout(new FlowLayout());
-		contenpane.add(panel1,BorderLayout.CENTER);
-		contenpane.add(panel4,BorderLayout.EAST);
-		contenpane.add(panel2,BorderLayout.EAST);
-		contenpane.add(panel3,BorderLayout.SOUTH);
-		
-		
-		
-		
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
-		
+		new StuForm();
 	}
 
 }
