@@ -1,4 +1,4 @@
-/*package practice.socket.multi;
+package practice.socket.multi;
 
 import java.io.*;
 import java.net.*;
@@ -605,4 +605,3 @@ public class ClientThread extends Thread{
 }
 
 
-*/
