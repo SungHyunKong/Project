@@ -43,7 +43,8 @@ public class CreateRoomDisplay extends JDialog implements ActionListener, ItemLi
 		c.add(tf);
 		
 		label = new JLabel("최대인원");
-		label.setForeground(Color.blue);label.setBounds(10,60,100,20);
+		label.setForeground(Color.blue);
+		label.setBounds(10,60,100,20);
 		c.add(label);
 		
 		radioPanel = new JPanel();

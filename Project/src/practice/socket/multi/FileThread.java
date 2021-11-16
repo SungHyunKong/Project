@@ -6,7 +6,7 @@ import java.util.*;
 
 
 
-public class FileThread {
+public class FileThread extends Thread {
 
 	private ReciveFile recv;
 	private Socket sock;
@@ -104,9 +104,14 @@ public class FileThread {
 				bin.read(data, 0, rest);
 				recv.lbl.setText("파일수신완료.......(" + fileLength + "/" + fileLength + " Byte)");
 				return;
-			}else {
+			}else if(i == count){
+				bin.read(data, i*size, rest);
+				recv.lbl.setText("파일수신완료.......(" + fileLength + "/" + fileLength + " Byte)");
+				return;
+}
+			{
 				bin.read(data,i*size,size);
-				recv.lbl.setText("파일수신숭......(" + ((i+1)*size)+"/"+fileLength+"Byte)");
+				recv.lbl.setText("파일수신중......(" + ((i+1)*size)+"/"+fileLength+"Byte)");
 				dout.writeUTF("flag");
 			}
 		}

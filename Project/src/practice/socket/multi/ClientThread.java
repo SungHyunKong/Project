@@ -1,12 +1,13 @@
 package practice.socket.multi;
 
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+//66, 82, 118, 236, 265, 306, 324번 수정
 
 public class ClientThread extends Thread{
 	
@@ -64,7 +65,7 @@ public class ClientThread extends Thread{
 		ct_waitRoom = new WaitRoomDisplay(this);
 		ct_chatRoom = null;
 		try {
-			ct_sock = new Socket(InetAddress.getLocalHost(),2777);
+			ct_sock = new Socket(InetAddress.getLocalHost(),1114);
 			ct_in = new DataInputStream(ct_sock.getInputStream());
 			ct_out = new DataOutputStream(ct_sock.getOutputStream());
 			ct_buffer = new StringBuffer(4096);
@@ -77,16 +78,16 @@ public class ClientThread extends Thread{
 	}
 
 	public ClientThread(String hostaddr) {
-		ct_waitRoom = new WaitRoomDisplay(This);
+		ct_waitRoom = new WaitRoomDisplay(this);
 		ct_chatRoom = null;
 		try {
-			ct_sock = new Socket(hostaddr, 2777);
+			ct_sock = new Socket(hostaddr, 1114);
 			ct_in = new DataInputStream(ct_sock.getInputStream());
 			ct_out = new DataOutputStream(ct_sock.getOutputStream());
 			ct_buffer = new StringBuffer(4096);
 			thisThread = this;
 		} catch (Exception e) {
-			MessageBoxLess msgout = new MEssageBoxLess(ct_waitRoom,"연결에러"."서버에 접속할 수 없습니다.");
+			MessageBoxLess msgout = new MessageBoxLess(ct_waitRoom,"연결에러","서버에 접속할 수 없습니다.");
 			msgout.show();
 		
 		}
@@ -116,7 +117,7 @@ public class ClientThread extends Thread{
 						ct_waitRoom.roomInfo.setListData(roomInfo);
 						ct_waitRoom.message.requestFocusInWindow();
 						
-					} catch (Exception e) {
+					} catch (NoSuchElementException e) {
 						ct_waitRoom.message.requestFocusInWindow();
 					}
 					break;
@@ -152,7 +153,7 @@ public class ClientThread extends Thread{
 					ct_waitRoom.hide();
 					if(ct_chatRoom == null) {
 						ct_chatRoom = new ChatRoomDisplay(this);
-						ct_chatRoom.isAdmin = ture;
+						ct_chatRoom.isAdmin = true;
 					}else {
 						ct_chatRoom.show();
 						ct_chatRoom.isAdmin=true;
@@ -164,7 +165,7 @@ public class ClientThread extends Thread{
 					int errCode = Integer.parseInt(st.nextToken());
 					if(errCode == ERR_ROOMSFULL) {
 						msgBox = new MessageBox(ct_waitRoom,"대화방개설","더 이상 대화방을 개설 할 수 없습니다.");
-						msgBox_show();
+						msgBox.show();
 					}
 					break;
 				}
@@ -208,10 +209,10 @@ public class ClientThread extends Thread{
 				case NO_ENTERROOM : {
 					int errCode = Integer.parseInt(st.nextToken());
 					if(errCode == ERR_ROOMERFULL) {
-						msgBox = new MEssageBox(ct_waitRoom, "대화방입장","대화방이 만원입니다.");
+						msgBox = new MessageBox(ct_waitRoom, "대화방입장","대화방이 만원입니다.");
 						msgBox.show();
 					}else if(errCode == ERR_PASSWORD) {
-						msgBox = new MESSAGEBOX(ct_waitRoom,"대화방입장","비밀번호가 틀립니다.");
+						msgBox = new MessageBox(ct_waitRoom,"대화방입장","비밀번호가 틀립니다.");
 						msgBox.show();
 					}
 					break;
@@ -234,7 +235,7 @@ public class ClientThread extends Thread{
 						ct_chatRoom.messages.append("###"+ id + "님이 강제퇴장 되었습니다.. ###\n");
 						
 					}else {
-						ct_chatRoom.messages.append("###"+ id + "님이 퇴장gktuT니다.. ###\n");
+						ct_chatRoom.messages.append("###"+ id + "님이 퇴장하셨습니다.. ###\n");
 						
 					}
 					ct_chatRoom.message.requestFocusInWindow();
@@ -263,7 +264,7 @@ public class ClientThread extends Thread{
 					try {
 						String data = st.nextToken();
 						if(roomNumber ==0) {
-							ct_waitRoom.messages.append(id + " :  + data + "\n);
+							ct_waitRoom.messages.append(id + " : "+ data +"\n");
 							if(id.equals(ct_logonID)) {
 								ct_waitRoom.message.setText("");
 								ct_waitRoom.message.requestFocusInWindow();
@@ -304,7 +305,7 @@ public class ClientThread extends Thread{
 								ct_chatRoom.message.setText("");
 								ct_chatRoom.messages.append("귓속말<to :" + idTo + "> :" + data + "\n");
 							}else{
-								ct_chatRoom.messages.append("귓속말<from:" + id + ">:" + data + "\n");
+								ct_chatRoom.messages.append("귓속말<from:" + id + "> :" + data + "\n");
 							}
 							ct_chatRoom.message.requestFocusInWindow();
 							
@@ -321,6 +322,9 @@ public class ClientThread extends Thread{
 					String message = "";
 					if(roomNumber == 0 ) {
 						message = "대기실에 "+ id + "님이 존재하지 않습니다.";
+						JOptionPane.showMessageDialog(ct_waitRoom, message,"귓속말 에러", JOptionPane.ERROR_MESSAGE);
+					}else {
+						message = "이 대화방에 " + id+"님이 존재하지 않습니다.";
 						JOptionPane.showMessageDialog(ct_waitRoom, message,"귓속말 에러", JOptionPane.ERROR_MESSAGE);
 					}
 					break;
@@ -422,7 +426,7 @@ public class ClientThread extends Thread{
 	}
 	public void requestLogon(String id) {
 		try {
-			logonbox = new MEssageBox(ct_waitRoom, "로그온", "서버에 로그온 중입니다.");
+			logonbox = new MessageBox(ct_waitRoom, "로그온", "서버에 로그온 중입니다.");
 			logonbox.show();
 			ct_logonID = id;
 			ct_buffer.setLength(0);
@@ -438,7 +442,7 @@ public class ClientThread extends Thread{
 	
 	public void requestCreateRoom(String roomName,int roomMaxUser,int isRock, String password) {
 		try {
-			ct_buffer.length(0);
+			ct_buffer.setLength(0);
 			ct_buffer.append(REQ_CREATEROOM);
 			ct_buffer.append(SEPARATOR);
 			ct_buffer.append(ct_logonID);

@@ -1,4 +1,6 @@
+
 package practice.socket.multi;
+
 
 import java.io.*;
 import java.net.*;
@@ -16,7 +18,7 @@ public class SendFile extends Frame implements ActionListener{
 	private static final String SEPARATOR = "|";
 	private String address;
 	
-	private SendFile(String address) {
+	 SendFile(String address) {
 		super("파일전송");
 		this.address = address;
 		

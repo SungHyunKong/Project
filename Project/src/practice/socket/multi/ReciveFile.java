@@ -41,7 +41,7 @@ public class ReciveFile extends Frame implements ActionListener{
 			try {
 				sock = socket.accept();
 				client = new FileThread(this, sock);
-				client.run();
+				client.start();
 			} catch (IOException e) {
 				System.out.println(e);
 				try {
@@ -55,7 +55,7 @@ public class ReciveFile extends Frame implements ActionListener{
 			
 			}
 			
-		} catch (Exception e) {
+		} catch (IOException e) {
 		}
 	}
 	public void actionPerformed(ActionEvent e) {

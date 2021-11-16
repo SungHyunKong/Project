@@ -1,5 +1,5 @@
+//42번 수정
 package practice.socket.multi;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -38,7 +38,7 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener, Lis
 		JPanel p = new JPanel();
 		p.setLayout(null);
 		p.setBounds(425, 10, 140, 75);
-		p.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED)));
+		p.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "참여자"));
 
 		roomerInfo = new JList();
 		roomerInfo.setFont(font);
