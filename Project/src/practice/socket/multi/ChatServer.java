@@ -4,7 +4,7 @@ import java.net.*;
 
 
 public class ChatServer {
-	public static final int cs_port=1114;
+	public static final int cs_port=2777;
 	public static final int cs_maxClient = 50;
 	
 	public static void main(String[] args) {

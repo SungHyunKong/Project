@@ -164,6 +164,7 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 		
 		setLocation(dim.width/2 - getWidth()/2 , dim.height/2 - getHeight()/2);
 		
+		
 		show();
 		
 		addWindowListener(
@@ -262,7 +263,7 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 		String roomName = st.nextToken();
 		int maxUser = Integer.parseInt(st.nextToken());
 		int user = Integer.parseInt(st.nextToken());
-		isRock= st.nextElement().equals("비공개")?true :false;
+		isRock= st.nextElement().equals("비공개") ? true :false;
 	}
 	
 	public void stateChanged(ChangeEvent e) {

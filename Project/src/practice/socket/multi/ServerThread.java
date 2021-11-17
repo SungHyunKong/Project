@@ -1,6 +1,5 @@
 package practice.socket.multi;
 
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -23,7 +22,7 @@ public class ServerThread extends Thread {
 	private static final int REQ_ENTERROOM = 1021;
 	private static final int REQ_QUITROOM = 1031;
 	private static final int REQ_LOGOUT = 1041;
-	private static final int REQ_SENDWORD=1051;
+	private static final int REQ_SENDWORD = 1051;
 	private static final int REQ_SENDWORDTO = 1052;
 	private static final int REQ_COERCEOUT = 1053;
 	private static final int REQ_SENDFILE = 1061;
@@ -43,7 +42,7 @@ public class ServerThread extends Thread {
 	private static final int YES_COERCEOUT = 2054;
 	private static final int YES_SENDFILE = 2061;
 	private static final int NO_SENDFILE = 2062;
-	private static final int MDY_WAITUSER=2003;
+	private static final int MDY_WAITUSER = 2003;
 	private static final int MDY_WAITINFO = 2013;
 	private static final int MDY_ROOMUSER = 2023;
 
@@ -76,15 +75,16 @@ public class ServerThread extends Thread {
 		send(st_buffer.toString());
 	}
 
-	private void modifyWaitRoom() throws IOException{
+	private void modifyWaitRoom() throws IOException {
 		st_buffer.setLength(0);
 		st_buffer.append(MDY_WAITINFO);
 		st_buffer.append(SEPARATOR);
 		st_buffer.append(st_waitRoom.getWaitRoomInfo());
 		broadcast(st_buffer.toString(), WAITROOM);
 	}
+
 	private void modifyWaitUser() throws IOException {
-		String ids = st_waitRoom.getUser();
+		String ids = st_waitRoom.getUsers();
 		st_buffer.setLength(0);
 		st_buffer.append(MDY_WAITUSER);
 		st_buffer.append(SEPARATOR);
@@ -128,52 +128,52 @@ public class ServerThread extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				String recvData=st_in.readUTF();
-				
+				String recvData = st_in.readUTF();
+
 				System.out.println(recvData);
-				
+
 				StringTokenizer st = new StringTokenizer(recvData, SEPARATOR);
-				int command =Integer.parseInt(st.nextToken());
+				int command = Integer.parseInt(st.nextToken());
 				switch (command) {
-				case REQ_LOGON:{
+				case REQ_LOGON: {
 					st_roomNumber = WAITROOM;
-				int result;
-				st_ID = st.nextToken();
-				result = st_waitRoom.addUser(st_ID,this);
-				st_buffer.setLength(0);
-				if(result == 0) {
-					st_buffer.append(YES_LOGON);
-					st_buffer.append(SEPARATOR);
-					st_buffer.append(st_waitRoom.getRooms());
-					send(st_buffer.toString());
-					modifyWaitUser();
-					System.out.println(st_ID + "의 연결요청 승인");
-				}else {
-					sendErrCode(NO_LOGON,result);
+					int result;
+					st_ID = st.nextToken();
+					result = st_waitRoom.addUser(st_ID, this);
+					st_buffer.setLength(0);
+					if (result == 0) {
+						st_buffer.append(YES_LOGON);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(st_waitRoom.getRooms());
+						send(st_buffer.toString());
+						modifyWaitUser();
+						System.out.println(st_ID + "의 연결요청 승인");
+					} else {
+						sendErrCode(NO_LOGON, result);
+					}
+					break;
 				}
-				break;
-				}
-				case REQ_CREATEROOM : {
-					String id,roomName, password;
-					int roomMaxUser , result;
+				case REQ_CREATEROOM: {
+					String id, roomName, password;
+					int roomMaxUser, result;
 					boolean isRock;
-					
-					id=st.nextToken();
+
+					id = st.nextToken();
 					String roominfo = st.nextToken();
-					StringTokenizer room= new StringTokenizer(roominfo, DELIMETER);
+					StringTokenizer room = new StringTokenizer(roominfo, DELIMETER);
 					roomName = room.nextToken();
 					roomMaxUser = Integer.parseInt(room.nextToken());
-					
-					isRock = (Integer.parseInt(room.nextToken())==0) ? false : true;
-					password= room.nextToken();
-					
-					ChatRoom chatRoom = new ChatRoom(roomName, roomMaxUser,isRock, password, id);
-					result= st_waitRoom.addRoom(chatRoom);
-					if(result == 0) {
+
+					isRock = (Integer.parseInt(room.nextToken()) == 0) ? false : true;
+					password = room.nextToken();
+
+					ChatRoom chatRoom = new ChatRoom(roomName, roomMaxUser, isRock, password, id);
+					result = st_waitRoom.addRoom(chatRoom);
+					if (result == 0) {
 						st_roomNumber = ChatRoom.getRoomNumber();
-						boolean temp= chatRoom.addUser(st_ID,this);
+						boolean temp = chatRoom.addUser(st_ID, this);
 						st_waitRoom.delUser(st_ID);
-						
+
 						st_buffer.setLength(0);
 						st_buffer.append(YES_CREATEROOM);
 						st_buffer.append(SEPARATOR);
@@ -181,24 +181,24 @@ public class ServerThread extends Thread {
 						send(st_buffer.toString());
 						modifyWaitRoom();
 						modifyRoomUser(st_roomNumber, id, 1);
-					}else {
-						sendErrCode(NO_CREATEROOM,result);
+					} else {
+						sendErrCode(NO_CREATEROOM, result);
 					}
 					break;
 				}
-				case REQ_ENTERROOM : {
+				case REQ_ENTERROOM: {
 					String id, password;
 					int roomNumber, result;
 					id = st.nextToken();
 					roomNumber = Integer.parseInt(st.nextToken());
 					try {
 						password = st.nextToken();
-					}catch(NoSuchElementException e) {
+					} catch (NoSuchElementException e) {
 						password = "0";
 					}
-					result = st_waitRoom.joinRoom(id,this,roomNumber,password);
-					
-					if(result ==0) {
+					result = st_waitRoom.joinRoom(id, this, roomNumber, password);
+
+					if (result == 0) {
 						st_buffer.setLength(0);
 						st_buffer.append(YES_ENTERROOM);
 						st_buffer.append(SEPARATOR);
@@ -207,44 +207,44 @@ public class ServerThread extends Thread {
 						st_buffer.append(id);
 						st_roomNumber = roomNumber;
 						send(st_buffer.toString());
-						modifyRoomUser(roomNumber,id,1);
+						modifyRoomUser(roomNumber, id, 1);
 						modifyWaitRoom();
-					}else {
+					} else {
 						sendErrCode(NO_ENTERROOM, result);
 					}
 					break;
-						
-					}
-				case REQ_QUITROOM : {
+
+				}
+				case REQ_QUITROOM: {
 					String id;
 					int roomNumber;
 					boolean updateWaitInfo;
 					id = st.nextToken();
 					roomNumber = Integer.parseInt(st.nextToken());
-					
+
 					updateWaitInfo = st_waitRoom.quitRoom(id, roomNumber, this);
-					
+
 					st_buffer.setLength(0);
 					st_buffer.append(YES_QUITROOM);
 					st_buffer.append(SEPARATOR);
 					st_buffer.append(id);
 					send(st_buffer.toString());
 					st_roomNumber = WAITROOM;
-					
-					if(updateWaitInfo) {
+
+					if (updateWaitInfo) {
 						modifyWaitRoom();
-					}else {
+					} else {
 						modifyWaitRoom();
-						modifyRoomUser(roomNumber,id,0);
-						
+						modifyRoomUser(roomNumber, id, 0);
+
 					}
 					break;
-					
+
 				}
-				case REQ_LOGOUT : {
-					String id= st.nextToken();
+				case REQ_LOGOUT: {
+					String id = st.nextToken();
 					st_waitRoom.delUser(id);
-					
+
 					st_buffer.setLength(0);
 					st_buffer.append(YES_LOGOUT);
 					send(st_buffer.toString());
@@ -252,10 +252,10 @@ public class ServerThread extends Thread {
 					release();
 					break;
 				}
-				case REQ_SENDWORD : {
+				case REQ_SENDWORD: {
 					String id = st.nextToken();
 					int roomNumber = Integer.parseInt(st.nextToken());
-					
+
 					st_buffer.setLength(0);
 					st_buffer.append(YES_SENDWORD);
 					st_buffer.append(SEPARATOR);
@@ -264,191 +264,194 @@ public class ServerThread extends Thread {
 					st_buffer.append(st_roomNumber);
 					st_buffer.append(SEPARATOR);
 					try {
-						String data =st.nextToken();
+						String data = st.nextToken();
 						st_buffer.append(data);
 					} catch (NoSuchElementException e) {}
-					
-						broadcast(st_buffer.toString(), roomNumber);
-						break;
+
+					broadcast(st_buffer.toString(), roomNumber);
+					break;
 				}
-					case REQ_SENDWORDTO : {
-						String id = st.nextToken();
-						int roomNumber = Integer.parseInt(st.nextToken());
-						String idTo = st.nextToken();
-						
-						Hashtable room = st_waitRoom.getClients(roomNumber);
-						ServerThread client = null;
-						if((client = (ServerThread) room.get(idTo))!=null) {
-							st_buffer.setLength(0);
-							st_buffer.append(YES_SENDWORDTO);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(id);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(idTo);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(st_roomNumber);
-							st_buffer.append(SEPARATOR);
-							try {
-								String data = st.nextToken();
-								st_buffer.append(data);
-							} catch (NoSuchElementException e) {}
-							client.send(st_buffer.toString());
-							send(st_buffer.toString());
-							break;
-						}else {
-							st_buffer.setLength(0);
-							st_buffer.append(NO_SENDWORDTO);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(idTo);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(st_roomNumber);
-							send(st_buffer.toString());
-							break;
-						}
+				case REQ_SENDWORDTO: {
+					String id = st.nextToken();
+					int roomNumber = Integer.parseInt(st.nextToken());
+					String idTo = st.nextToken();
+
+					Hashtable room = st_waitRoom.getClients(roomNumber);
+					ServerThread client = null;
+					if ((client = (ServerThread) room.get(idTo)) != null) {
+						st_buffer.setLength(0);
+						st_buffer.append(YES_SENDWORDTO);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(id);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(idTo);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(st_roomNumber);
+						st_buffer.append(SEPARATOR);
+						try {
+							String data = st.nextToken();
+							st_buffer.append(data);
+						} catch (NoSuchElementException e) {}
+						client.send(st_buffer.toString());
+						send(st_buffer.toString());
+						break;
+					} else {
+						st_buffer.setLength(0);
+						st_buffer.append(NO_SENDWORDTO);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(idTo);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(st_roomNumber);
+						send(st_buffer.toString());
+						break;
 					}
-					
-					case REQ_SENDFILE : {
-						String id = st.nextToken();
-						int roomNumber = Integer.parseInt(st.nextToken());
-						String idTo = st.nextToken();
-						
-						Hashtable room = st_waitRoom.getClients(roomNumber);
-						ServerThread client = null;
-						if((client = (ServerThread) room.get(idTo))!=null) {
-							st_buffer.setLength(0);
-							st_buffer.append(REQ_SENDFILE);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(id);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(st_roomNumber);
-							client.send(st_buffer.toString());
-							break;
-						}else {
-							st_buffer.setLength(0);
-							st_buffer.append(NO_SENDFILE);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(ERR_NOUSER);
-							st_buffer.append(SEPARATOR);
-							st_buffer.append(idTo);
-							send(st_buffer.toString());
-							break;
-						}
-					}
-					case NO_SENDFILE : {
-						String id = st.nextToken();
-						int roomNumber = Integer.parseInt(st.nextToken());
-						String idTo = st.nextToken();
-						
-						Hashtable room = st_waitRoom.getClients(roomNumber);
-						ServerThread client = null;
-						client = (ServerThread) room.get(idTo);
-						
+				}
+
+				case REQ_SENDFILE: {
+					String id = st.nextToken();
+					int roomNumber = Integer.parseInt(st.nextToken());
+					String idTo = st.nextToken();
+
+					Hashtable room = st_waitRoom.getClients(roomNumber);
+					ServerThread client = null;
+					if ((client = (ServerThread) room.get(idTo)) != null) {
+						st_buffer.setLength(0);
+						st_buffer.append(REQ_SENDFILE);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(id);
+						st_buffer.append(SEPARATOR);
+						st_buffer.append(st_roomNumber);
+						client.send(st_buffer.toString());
+						break;
+					} else {
 						st_buffer.setLength(0);
 						st_buffer.append(NO_SENDFILE);
 						st_buffer.append(SEPARATOR);
-						st_buffer.append(ERR_REJECTION);
+						st_buffer.append(ERR_NOUSER);
 						st_buffer.append(SEPARATOR);
-						st_buffer.append(id);
-						
-						client.send(st_buffer.toString());
+						st_buffer.append(idTo);
+						send(st_buffer.toString());
 						break;
 					}
-					
-					case YES_SENDFILE : {
-						String id = st.nextToken();
-						int roomNumber = Integer.parseInt(st.nextToken());
-						String idTo = st.nextToken();
-						String hostaddr = st.nextToken();
-						
-						Hashtable room = st_waitRoom.getClients(roomNumber);
-						ServerThread client = null;
-						client = (ServerThread) room.get(idTo);
-						
-						st_buffer.setLength(0);
-						st_buffer.append(YES_SENDFILE);
-						st_buffer.append(SEPARATOR);
-						st_buffer.append(id);
-						st_buffer.append(SEPARATOR);
-						st_buffer.append(hostaddr);
-						
-						client.send(st_buffer.toString());
-						break;
+				}
+				case NO_SENDFILE: {
+					String id = st.nextToken();
+					int roomNumber = Integer.parseInt(st.nextToken());
+					String idTo = st.nextToken();
+
+					Hashtable room = st_waitRoom.getClients(roomNumber);
+					ServerThread client = null;
+					client = (ServerThread) room.get(idTo);
+
+					st_buffer.setLength(0);
+					st_buffer.append(NO_SENDFILE);
+					st_buffer.append(SEPARATOR);
+					st_buffer.append(ERR_REJECTION);
+					st_buffer.append(SEPARATOR);
+					st_buffer.append(id);
+
+					client.send(st_buffer.toString());
+					break;
+				}
+
+				case YES_SENDFILE: {
+					String id = st.nextToken();
+					int roomNumber = Integer.parseInt(st.nextToken());
+					String idTo = st.nextToken();
+					String hostaddr = st.nextToken();
+
+					Hashtable room = st_waitRoom.getClients(roomNumber);
+					ServerThread client = null;
+					client = (ServerThread) room.get(idTo);
+
+					st_buffer.setLength(0);
+					st_buffer.append(YES_SENDFILE);
+					st_buffer.append(SEPARATOR);
+					st_buffer.append(id);
+					st_buffer.append(SEPARATOR);
+					st_buffer.append(hostaddr);
+
+					client.send(st_buffer.toString());
+					break;
+				}
+				case REQ_COERCEOUT: {
+					int roomNumber = Integer.parseInt(st.nextToken());
+					String idTo = st.nextToken();
+					boolean updateWaitInfo;
+					Hashtable room = st_waitRoom.getClients(roomNumber);
+					ServerThread client = null;
+					client = (ServerThread) room.get(idTo);
+					updateWaitInfo = st_waitRoom.quitRoom(idTo, roomNumber, client);
+
+					st_buffer.setLength(0);
+					st_buffer.append(YES_COERCEOUT);
+					client.send(st_buffer.toString());
+					client.st_roomNumber = 0;
+
+					if (updateWaitInfo) {
+						modifyWaitRoom();
+					} else {
+						modifyWaitRoom();
+						modifyRoomUser(roomNumber, idTo, 2);
+
 					}
-					case REQ_COERCEOUT : {
-						int roomNumber = Integer.parseInt(st.nextToken());
-						String idTo = st.nextToken();
-						boolean updateWaitInfo;
-						Hashtable room = st_waitRoom.getClients(roomNumber);
-						ServerThread client = null;
-						client = (ServerThread) room.get(idTo);
-						updateWaitInfo = st_waitRoom.quitRoom(idTo, roomNumber , client);
-						
-						st_buffer.setLength(0);
-						st_buffer.append(YES_COERCEOUT);
-						client.send(st_buffer.toString());
-						client.st_roomNumber =0;
-						
-						if(updateWaitInfo) {
-							modifyWaitRoom();
-						}else {
-							modifyWaitRoom();
-							modifyRoomUser(roomNumber,idTo,2);
-							
-						}
-						break;
-					}
+					break;
+				}
 				}
 				Thread.sleep(100);
-					
-				}
-				}catch(NullPointerException e){
-					
-				}catch(InterruptedException e) {
-					System.out.println(e);
-					
-					if(st_roomNumber == 0) {
-						st_waitRoom.delUser(st_ID);
-					}else {
-						boolean temp = st_waitRoom.quitRoom(st_ID, st_roomNumber,this);
-						st_waitRoom.delUser(st_ID);
-					}
-					release();
-				}catch(IOException e) {
-					System.out.println(e);
-					
-					if(st_roomNumber == 0) {
-						st_waitRoom.delUser(st_ID);
-					}else {
-						boolean temp = st_waitRoom.quitRoom(st_ID, st_roomNumber, this);
-						st_waitRoom.delUser(st_ID);
-					}
-					release();
-				}
+
 			}
-		
-		public void release() {
-			try {
-				if(st_in != null) st_in.close();
-			} catch (IOException e1) {
-			}finally {
-				st_in = null;
+		} catch (NullPointerException e) {
+
+		} catch (InterruptedException e) {
+			System.out.println(e);
+
+			if (st_roomNumber == 0) {
+				st_waitRoom.delUser(st_ID);
+			} else {
+				boolean temp = st_waitRoom.quitRoom(st_ID, st_roomNumber, this);
+				st_waitRoom.delUser(st_ID);
 			}
-			try {
-				if(st_out != null) st_out.close();
-			} catch (IOException e1) {				
-			}finally {
-				st_out = null;
+			release();
+		} catch (IOException e) {
+			System.out.println(e);
+
+			if (st_roomNumber == 0) {
+				st_waitRoom.delUser(st_ID);
+			} else {
+				boolean temp = st_waitRoom.quitRoom(st_ID, st_roomNumber, this);
+				st_waitRoom.delUser(st_ID);
 			}
-			try {
-			if(st_sock != null) st_sock.close();	
-			} catch (IOException e1) {
-			}finally {
-				st_sock = null;
-			}
-			if(st_ID != null) {
-				System.out.println(st_ID  + "와 연결을 종료합니다.");
-				st_ID = null;
-			}
-}
+			release();
+		}
+	}
+
+	public void release() {
+		try {
+			if (st_in != null)
+				st_in.close();
+		} catch (IOException e1) {
+		} finally {
+			st_in = null;
+		}
+		try {
+			if (st_out != null)
+				st_out.close();
+		} catch (IOException e1) {
+		} finally {
+			st_out = null;
+		}
+		try {
+			if (st_sock != null)
+				st_sock.close();
+		} catch (IOException e1) {
+		} finally {
+			st_sock = null;
+		}
+		if (st_ID != null) {
+			System.out.println(st_ID + "와 연결을 종료합니다.");
+			st_ID = null;
+		}
+	}
 
 }

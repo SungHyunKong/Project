@@ -87,7 +87,7 @@ public class WaitRoom {
 			return rooms;
 		}
 		
-		public synchronized String getUser() {
+		public synchronized String getUsers() {
 			StringBuffer id = new StringBuffer();
 			String ids;
 			Enumeration enu = userVector.elements();
@@ -116,7 +116,7 @@ public class WaitRoom {
 		StringBuffer roomInfo = new StringBuffer();
 		roomInfo.append(getRooms());
 		roomInfo.append(SEPARATOR);
-		roomInfo.append(getUser());
+		roomInfo.append(getUsers());
 		return roomInfo.toString();
 	}
 	public synchronized int joinRoom(String id, ServerThread client, int roomNumber, String password) {

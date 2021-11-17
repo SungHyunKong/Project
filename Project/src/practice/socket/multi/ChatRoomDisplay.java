@@ -197,5 +197,4 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener, Lis
 	public void keyTyped(KeyEvent e) {
 
 	}
-
 }

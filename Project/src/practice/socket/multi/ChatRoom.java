@@ -45,7 +45,7 @@ public class ChatRoom {
 		Enumeration ids = userVector.elements();
 		while(ids.hasMoreElements()) {
 			String tempId = (String) ids.nextElement();
-			if(tempId.equals(id))return true;
+			if(tempId.equals(id)) return true;
 		}
 		return false;
 	}
