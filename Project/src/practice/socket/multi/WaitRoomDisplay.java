@@ -186,6 +186,7 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 		
 		
 	}
+	//대기 레이아웃 설정
 
 	public void resetComponents() {
 		messages.setText("");
@@ -196,6 +197,7 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 		isSelected = false;
 		message.requestFocusInWindow();
 	}
+	//구성하는 변수들 초기화
 	
 	public void keyPressed(KeyEvent ke) {
 		if(ke.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -215,6 +217,7 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 			}
 		}
 	}
+	//엔터를 누를시 생기는 이벤트. /w 에 대한 귓속말처리이며 StringToken으로 분리를 한 후 첫문자열인 /w를 command에, 두번째 문자열인 상대방아이디를 idTo에, 마지막 문자열인 채팅내용을 data에 넣음
 	
 	public void mouseClicked(MouseEvent e) {
 		try {
@@ -223,6 +226,7 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 			setSelectedRoomInfo(select);
 		} catch (Exception err) {}
 	}
+	//마우스 클릭시 이벤트이며 select값을 넘겨줌
 	
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == create) {
@@ -257,6 +261,7 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 						}
 					}
 	}
+	//채팅방을 입장할시 선택이 됫는지 안됫는지를 판단하고 로그아웃/귓속말 등의 대기방에서의 버튼들을 관리해줌.
 	private void setSelectedRoomInfo(String select) {
 		StringTokenizer st = new StringTokenizer(select,"=");
 		roomNumber = Integer.parseInt(st.nextToken());
@@ -265,10 +270,12 @@ public class WaitRoomDisplay extends JFrame implements ActionListener,KeyListene
 		int user = Integer.parseInt(st.nextToken());
 		isRock= st.nextElement().equals("비공개") ? true :false;
 	}
+	//선택된방의 정보를 주고받음
 	
 	public void stateChanged(ChangeEvent e) {
 		jsp3.getVerticalScrollBar().setValue((jsp3.getVerticalScrollBar().getValue()+20));
 	}
+	//scrollbar의 세로길이 설정
 	
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}

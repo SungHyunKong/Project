@@ -37,7 +37,7 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener, Lis
 
 		JPanel p = new JPanel();
 		p.setLayout(null);
-		p.setBounds(425, 10, 140, 75);
+		p.setBounds(425, 10, 140, 175);
 		p.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED), "참여자"));
 
 		roomerInfo = new JList();
@@ -125,12 +125,14 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener, Lis
 		);
 
 	}
+	// 방을 만들고 생기는 채팅방의 레이아웃임.
 
 	public void resetComponets() {
 		messages.setText("");
 		message.setText("");
 		message.requestFocusInWindow();
 	}
+	//message,messages 두개를 ""로 초기화하고 message에 포커스를 설정
 
 	public void keyPressed(KeyEvent ke) {
 		if (ke.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -151,12 +153,14 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener, Lis
 			}
 		}
 	}
+	//enter를 눌럿을때만 반응하는 key이벤트이며 words를 message의 텍스트로 가져오며 words를 " " 구분자로 자른 후 첫 문자(/w)를 command, 두번째 문자인 id를 idTo, 세번째 문자인 귓속말내용을 data에 저장후 thread에 data,idTo를 보냄.
 
 	public void valueChanged(ListSelectionEvent e) {
 		isSelected = true;
 		idTo = String.valueOf(((JList) e.getSource()).getSelectedValue());
 
 	}
+	//귓속말 대상인 idTo에 리스트에서 선택된 값을 반환하여 String 형변환하여 저장됨
 
 	public void actionPerformed(ActionEvent ae) {
 		if (ae.getSource() == coerceOut) {
@@ -185,11 +189,13 @@ class ChatRoomDisplay extends JFrame implements ActionListener, KeyListener, Lis
 			}
 		}
 	}
+	//각 버튼에 대한 이벤트를 설정 하여 thread에서 각이벤트에대한 정보를 넘겨줌.
 
 	public void stateChanged(ChangeEvent e) {
 		jsp3.getVerticalScrollBar().setValue((jsp3.getVerticalScrollBar().getValue() + 20));
 
 	}
+	//Scrollbal 의 세로 길이를 설정
 
 	public void keyReleased(KeyEvent e) {
 	}

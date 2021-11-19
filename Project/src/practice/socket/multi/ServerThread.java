@@ -14,7 +14,7 @@ public class ServerThread extends Thread {
 	public int st_roomNumber;
 
 	private static final String SEPARATOR = "|";
-	private static final String DELIMETER = "";
+	private static final String DELIMETER = "'";
 	private static final int WAITROOM = 0;
 
 	private static final int REQ_LOGON = 1001;
@@ -66,6 +66,7 @@ public class ServerThread extends Thread {
 		}
 
 	}
+	//유저간 네트워킹을 하기위한 소켓설정 및 데이터설정
 
 	private void sendErrCode(int message, int errCode) throws IOException {
 		st_buffer.setLength(0);
@@ -74,7 +75,7 @@ public class ServerThread extends Thread {
 		st_buffer.append(errCode);
 		send(st_buffer.toString());
 	}
-
+	// 에러메세지설정
 	private void modifyWaitRoom() throws IOException {
 		st_buffer.setLength(0);
 		st_buffer.append(MDY_WAITINFO);
@@ -82,7 +83,8 @@ public class ServerThread extends Thread {
 		st_buffer.append(st_waitRoom.getWaitRoomInfo());
 		broadcast(st_buffer.toString(), WAITROOM);
 	}
-
+	//대기방 리스트 설정
+	
 	private void modifyWaitUser() throws IOException {
 		String ids = st_waitRoom.getUsers();
 		st_buffer.setLength(0);
@@ -91,6 +93,7 @@ public class ServerThread extends Thread {
 		st_buffer.append(ids);
 		broadcast(st_buffer.toString(), WAITROOM);
 	}
+	//대기자 유저 리스트 설정
 
 	private void modifyRoomUser(int roomNumber, String id, int code) throws IOException {
 		String ids = st_waitRoom.getRoomInfo(roomNumber);
@@ -104,6 +107,7 @@ public class ServerThread extends Thread {
 		st_buffer.append(ids);
 		broadcast(st_buffer.toString(), roomNumber);
 	}
+	//채팅방 유저 리스트
 
 	private void send(String sendData) throws IOException {
 		synchronized (st_out) {
@@ -114,6 +118,7 @@ public class ServerThread extends Thread {
 			st_out.flush();
 		}
 	}
+	//채팅 메세지를 UTF로설정
 
 	private synchronized void broadcast(String sendData, int roomNumber) throws IOException {
 		ServerThread client;
@@ -124,6 +129,7 @@ public class ServerThread extends Thread {
 			client.send(sendData);
 		}
 	}
+	//client thread 에 cilents라는 hash에 저장된 roomNumber에 대한 client를 저장함.
 
 	public void run() {
 		try {
@@ -426,6 +432,8 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	//serverThread를 start하면 실행되며 각 case마다 데이터를 주고받고 오류를 출력하는것으로 보임. 
+	// 각케이스에 대한 이해가 더 필요하다
 	public void release() {
 		try {
 			if (st_in != null)
@@ -453,5 +461,6 @@ public class ServerThread extends Thread {
 			st_ID = null;
 		}
 	}
+	//소켓에 대한 오류출력
 
 }

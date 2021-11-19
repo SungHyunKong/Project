@@ -27,6 +27,7 @@ public class FileThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//ReciveFile과 socket을 매개변수로하는 Filethread의 생성자.
 	
 	public void run() {
 		try {
@@ -91,6 +92,7 @@ public class FileThread extends Thread {
 			}
 		}
 	}
+	//thread를 시작할떄 실행되며 파일을 전송하기위한 thread
 	private void readFile(BufferedInputStream bin, DataOutputStream dout, byte[] data, int fileLength) throws IOException{
 		int size = 2048;
 		int count = fileLength/size;
@@ -116,6 +118,7 @@ public class FileThread extends Thread {
 			}
 		}
 	}
+	//file을 성공적으로 보냇을때 설정.
 
 
 }

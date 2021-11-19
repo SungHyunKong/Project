@@ -44,10 +44,13 @@ public class MessageBox extends JDialog implements ActionListener{
 		
 		
 	}
+	//어떤 레이아웃인지 확인이 필요하지만 MessageBox에 대한 레이아웃임.
+	
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == bt) {
 			dispose();
 		}
 	}
+	//버튼을 눌렀을시 안보이게함.
 
 }

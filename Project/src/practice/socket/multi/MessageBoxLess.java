@@ -35,10 +35,12 @@ public class MessageBoxLess extends JDialog implements ActionListener{
 		client = parent;
 		
 	}
+	// MessageBoxLess에 대한 레이아웃으로 보이지만 어떤 레이아웃인지 확인이 필요.
 	public void actionPerformed(ActionEvent ae) {
 		dispose();
 		System.exit(0);
 	}
+	//버튼을 누를시 시스템을 종료함.
 
 
 }

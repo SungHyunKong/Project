@@ -35,4 +35,5 @@ public class ChatServer {
 		}
 	}
 
+		//서버 접속 하면서 port지정후 socket, thread 실행
 }

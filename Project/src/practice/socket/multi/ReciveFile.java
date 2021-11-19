@@ -58,13 +58,16 @@ public class ReciveFile extends Frame implements ActionListener{
 		} catch (IOException e) {
 		}
 	}
+	//파일 전송할 시에 사용되는 소켓설정.
 	public void actionPerformed(ActionEvent e) {
 		dispose();
 	}
+	//전송을 누를시 창을닫음.
 	class WinListener extends WindowAdapter
 	{
 		public void windowsClosing(WindowEvent we) {
 			dispose();
 		}
 	}
+	//X 표시창을 누를시 창을종료.
 }

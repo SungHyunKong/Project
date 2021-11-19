@@ -136,6 +136,7 @@ public class CreateRoomDisplay extends JDialog implements ActionListener, ItemLi
 		
 		
 	}
+	//채팅방을 만들때 뜨는 레이아웃임.
 	
 	public void itemStateChanged(ItemEvent ie) {
 		if(ie.getSource() == unrock) {
@@ -160,6 +161,7 @@ public class CreateRoomDisplay extends JDialog implements ActionListener, ItemLi
 		}
 		
 	}
+	//인원을 설정하는 radio버튼을 누를시 실행되는이벤트로 roomMaxUser를 설정해주고있음.
 	
 	public void actionPerformed(ActionEvent ae) {
 		if(ae.getSource() == ok) {
@@ -181,6 +183,7 @@ public class CreateRoomDisplay extends JDialog implements ActionListener, ItemLi
 			dispose();
 		}
 	}
+	//방제목이나 비밀번호가 공백일시 입력을하라는 다이얼로그를출력
 	
 
 }

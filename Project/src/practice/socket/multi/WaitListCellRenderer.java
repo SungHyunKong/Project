@@ -26,6 +26,7 @@ public class WaitListCellRenderer extends JLabel implements ListCellRenderer {
 			count =0;
 			
 		}
+	//유저목록이 보이는 table에 대한 설정.
 	
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		setText(value.toString());
@@ -36,6 +37,7 @@ public class WaitListCellRenderer extends JLabel implements ListCellRenderer {
 		
 		return this;
 	}
+	// 테이블이 포커스 되었을때 설정
 	public void setDefaultTab(int defaultTab) {
 		m_defaultTab = defaultTab;
 	}
@@ -81,5 +83,8 @@ public class WaitListCellRenderer extends JLabel implements ListCellRenderer {
 			x = getTab(index);
 		}
 	}
+	
+	//테이블의 폰트및 색상들을 설정.
+	//전체적으로 이해가좀더 필요.
 
 }

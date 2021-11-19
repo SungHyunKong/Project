@@ -9,7 +9,7 @@ public class WaitRoom {
 	private static final int MAX_ROOM = 10;
 	private static final int MAX_USER = 100;
 	private static final String SEPARATOR = "|";
-	private static final String DELIMETER = "";
+	private static final String DELIMETER = "'";
 	private static final String DELIMETER1 = "=";
 	
 	private static final int ERR_ALREADYUSER = 3001;
@@ -33,6 +33,7 @@ public class WaitRoom {
 		roomCount = 0;
 		
 	}
+	//항상 사용하기위해 static 으로설정
 	
 	public WaitRoom() {}
 		public synchronized int addUser(String id, ServerThread client) {
@@ -58,12 +59,14 @@ public class WaitRoom {
 			return 0;
 			
 		}
+		//채팅방에 user가 추가될시 동기화로 관리를해주고 Enumeration으로 데이터를 관리함.
 		
 		public synchronized void delUser(String id) {
 			userVector.removeElement(id);
 			userHash.remove(id);
 			userCount--;
 	}
+		//유저삭제시 동기화
 		
 		public synchronized String getRooms() {
 			StringBuffer room = new StringBuffer();
@@ -86,6 +89,7 @@ public class WaitRoom {
 			}
 			return rooms;
 		}
+		//채팅방에 대한 정보를 동기화
 		
 		public synchronized String getUsers() {
 			StringBuffer id = new StringBuffer();
@@ -104,6 +108,7 @@ public class WaitRoom {
 			}
 			return ids;
 		}
+		//유저에대한 정보를 동기화
 		
 		public synchronized int addRoom(ChatRoom room) {
 			if(roomCount == MAX_ROOM) return ERR_ROOMSFULL;
@@ -112,6 +117,7 @@ public class WaitRoom {
 			roomCount++;
 			return 0;
 		}
+		//채팅방을 만들시 정보 동기화
 	public String getWaitRoomInfo() {
 		StringBuffer roomInfo = new StringBuffer();
 		roomInfo.append(getRooms());
@@ -119,6 +125,7 @@ public class WaitRoom {
 		roomInfo.append(getUsers());
 		return roomInfo.toString();
 	}
+	//대기방들에 대한 정보 주고받음
 	public synchronized int joinRoom(String id, ServerThread client, int roomNumber, String password) {
 		Integer roomNum = new Integer(roomNumber);
 		ChatRoom room = (ChatRoom) roomHash.get(roomNum);
@@ -140,12 +147,14 @@ public class WaitRoom {
 		
 		return 0;
 	}
+	//방을 들어갈 시 정보 동기화
 	
 	public String getRoomInfo(int roomNumber) {
 		Integer roomNum = new Integer(roomNumber);
 		ChatRoom room = (ChatRoom) roomHash.get(roomNum);
 		return room.getUsers();
 	}
+	//방에대한 정보를얻음
 	
 	public synchronized boolean quitRoom(String id, int roomNumber, ServerThread client) {
 		boolean returnValue = false;
@@ -161,10 +170,12 @@ public class WaitRoom {
 		userHash.put(id, client);
 		return returnValue;
 	}
+	//방을 나갈때 정보 주고받음
 	public synchronized Hashtable getClients(int roomNumber) {
 		if(roomNumber == 0 ) return userHash;
 		Integer roomNum = new Integer(roomNumber);
 		ChatRoom room = (ChatRoom) roomHash.get(roomNum);
 		return room.getClients();
 	}
+	//hashtable에서 client 정보를 얻음
 }

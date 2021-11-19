@@ -22,7 +22,7 @@ public class ClientThread extends Thread {
 	private static MessageBox msgBox, logonbox, fileTransBox;
 
 	private static final String SEPARATOR = "|";
-	private static final String DELIMETER = "";
+	private static final String DELIMETER = "'";
 	private static final String DELIMETER2 = "=";
 
 	private static final int REQ_LOGON = 1001;
@@ -74,6 +74,7 @@ public class ClientThread extends Thread {
 			msgout.show();
 		}
 	}
+	//ClientThread의 기본 생성자로 sockt 포트설정 및 Data를 넘겨받을때 크기를 설정해줌
 
 	public ClientThread(String hostaddr) {
 		ct_waitRoom = new WaitRoomDisplay(this);
@@ -90,6 +91,7 @@ public class ClientThread extends Thread {
 
 		}
 	}
+	//host 매개변수를 입력받고 해당 host의 sockt설정 및 데이터를 설정해줌
 
 	public void run() {
 		try {
@@ -428,6 +430,7 @@ public class ClientThread extends Thread {
 			release();
 		}
 	}
+	//각 case 에 대해 이해가 더 필요하며 각 case 마다 message를 띄우거나 값을 저장시키고있음.
 
 	public void requestLogon(String id) {
 		try {
@@ -444,6 +447,7 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//id를 입력 후 로그인할때 콘솔에 출력하기위함.
 
 	public void requestCreateRoom(String roomName, int roomMaxUser, int isRock, String password) {
 		try {
@@ -465,6 +469,7 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//채팅방을 만들때 정보를 StringBuffer에 추가후 toString함.
 
 	public void requestEnterRoom(int roomNumber, String password) {
 		try {
@@ -481,6 +486,7 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//채팅방에 들어갈때의 정보를 넘겨받음
 
 	public void requestQuitRoom() {
 		try {
@@ -496,6 +502,7 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//채팅방을 나갈때의 정보를 넘겨받음.
 
 	public void requestLogout() {
 		try {
@@ -509,6 +516,7 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//로그아웃버튼을 눌렀을때 데이터를 넘겨받음.
 
 	public void requestSendWord(String data) {
 
@@ -528,6 +536,7 @@ public class ClientThread extends Thread {
 		}
 
 	}
+	//채팅을할때의 데이터를넘겨받음.
 
 	public void requestSendWordTo(String data, String idTo) {
 		try {
@@ -546,6 +555,7 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//귓속말을할떄의 데이터를넘겨받음.
 
 	public void requestCoerceOut(String idTo) {
 		try {
@@ -560,6 +570,7 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//강제퇴장 할시에 데이터를넘겨받음
 
 	public void requestSendFile(String idTo) {
 		fileTransBox = new MessageBox(ct_chatRoom, "파일전송", "상대방의 승인을 기다립니다.");
@@ -580,11 +591,13 @@ public class ClientThread extends Thread {
 			System.out.println(e);
 		}
 	}
+	//파일을 전송할떄의 데이터를넘겨받음.
 
 	private void send(String sendData) throws IOException {
 		ct_out.writeUTF(sendData);
 		ct_out.flush();
 	}
+	//데이터를 넘겨줄떄 UTF 형식으로 쓰기위해.
 
 	public void release() {
 		if (thisThread != null) {
@@ -618,4 +631,5 @@ public class ClientThread extends Thread {
 		}
 		System.exit(0);
 	}
+	//이해가 필요 . thread를 동기화해줄때 초기화하는걸로보임.
 }

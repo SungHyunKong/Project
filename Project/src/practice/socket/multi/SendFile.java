@@ -59,6 +59,7 @@ public class SendFile extends Frame implements ActionListener{
 		setSize(250,130);
 		show();
 	}
+	 //파일전송시 레이아웃
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == bt_dialog) {
@@ -136,6 +137,7 @@ public class SendFile extends Frame implements ActionListener{
 			dispose();
 		}
 	}
+	//파일전송를 눌렀을때의 이벤트를 설정하엿으며 오류일시 오류메세지가 뜨게해놓았음.
 	
 	private void sendFile(BufferedOutputStream bout, DataInputStream din, byte[] data, int fileLength ) throws IOException {
 		int size = 2048;
@@ -163,6 +165,7 @@ public class SendFile extends Frame implements ActionListener{
 			}
 		}
 	}
+	//파일을 보낼 시 데이터를 주고받음
 
 	class WinListener extends WindowAdapter{
 		public void windowclosing(WindowEvent we) {
