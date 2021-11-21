@@ -1,87 +1,138 @@
 package project.scoremanagement;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
-public class StuForm  extends JFrame {
-	Vector<String> vec;
-	
-	StuForm(){
-		
-		JPanel p = new JPanel();
-		
-		JLabel la1 = new JLabel("     학번");
-		JLabel la2 = new JLabel("국어점수");
-		JLabel la3 = new JLabel("영어점수");
-		JLabel la4 = new JLabel("수학점수");
-		
-		
-		
-		JTextField text1 = new JTextField(10);
-		JTextField text2 = new JTextField(10);
-		JTextField text3 = new JTextField(10);
-		JTextField text4 = new JTextField(10);
-		JTable tab = new JTable();
-		JScrollPane scroll = new JScrollPane(tab);
-		DefaultTableModel model = new DefaultTableModel();
-		JButton btn1 = new JButton("입력");
-		JButton btn2 = new JButton("출력");
-		JButton btn3 = new JButton("순위");
-		JButton btn4 = new JButton("파일저장");
-		JButton btn5 = new JButton("파일읽기");
-		
-		la1.setBounds(40, 75, 60, 60);
-		la2.setBounds(40, 175, 60, 60);
-		la3.setBounds(40, 275, 60, 60);
-		la4.setBounds(40, 375, 60, 60);
-		text1.setBounds(100, 90, 125, 25);
-		text2.setBounds(100, 190, 125, 25);
-		text3.setBounds(100, 290, 125, 25);
-		text4.setBounds(100, 390, 125, 25);
-		tab.setBounds(300, 75, 400, 425);
-		btn1.setBounds(110,550, 90, 30);
-		btn2.setBounds(220,550, 90, 30);
-		btn3.setBounds(330,550, 90, 30);
-		btn4.setBounds(440,550, 90, 30);
-		btn5.setBounds(550,550, 90, 30);
-		add(la1);
-		add(la2);
-		add(la3);
-		add(la4);
-		add(text1);
-		add(text2);
-		add(text3);
-		add(text4);
-		add(tab);
-		add(btn1);
-		add(btn2);
-		add(btn3);
-		add(btn4);
-		add(btn5);
-		add(p);
-		
-		setTitle("성적관리프로그램");
-		setSize(750,650);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
-	}
-	
-	public static void main(String[] args) {
-		new StuForm();
-	}
 
+class StuForm extends JFrame implements ActionListener
+{
+	private JLabel hakL, nameL, korL, engL, mathL;
+	private JLabel [] allLabel;
+	private JButton bt1, bt2, bt3, bt4, bt5, bt6,bt7;
+	private JButton [] allBtn;
+	private JTextField hakT, nameT, korT, engT, mathT;
+	private JTextField [] allText;
+	private DefaultTableModel model;
+	//private DefaultTableModel modelTemp;  //model 복제품
+	private Vector <String> head;
+	private JTable table;
+	private StuImple si;
+	//private Vector <ArrayList> addTable;
+	
+	public StuForm(){
+		si= new StuImple(this);
+		//하단에 버튼 생성
+		JPanel bottom = new JPanel(new GridLayout(1,5)); 
+		bt1=new JButton("입력");
+		bt2=new JButton("출력");
+		bt3=new JButton("학번검색");
+		bt4=new JButton("순위");
+		bt5=new JButton("삭제");
+		bt6=new JButton("파일저장");
+		bt7=new JButton("파일열기"); 
+		allBtn = new JButton[]{bt1,bt2,bt3,bt4,bt5,bt6,bt7};
+		//버튼 패널에 붙이기
+		for(int i=0;i<allBtn.length;i++){
+			bottom.add(allBtn[i]);
+		}
+		add("South",bottom);
+
+		//테이블 생성
+		head = new Vector<String>();
+		head.add("학번");
+		head.add("이름");
+		head.add("국어");
+		head.add("영어");
+		head.add("수학");
+		head.add("총점");
+		head.add("평균");
+//		modelTemp = new DefaultTableModel(head,0);
+		model = new DefaultTableModel (head,0);
+		table = new JTable(model);
+		JScrollPane scroll = new JScrollPane(table);
+		
+		//중앙 레이아웃
+		JPanel center = new JPanel(new GridLayout(1,2,0,0));
+		JPanel center1= new JPanel(new GridLayout(5,1,0,0));  //라벨과 텍스트 필드가 담김
+		JPanel []leftP= new JPanel[5];
+		for(int i=0;i<leftP.length;i++){
+			leftP[i] = new JPanel();
+		}
+		//라벨 설정
+		hakL=new JLabel("학번");
+		nameL=new JLabel("이름");
+		korL=new JLabel("국어");
+		engL=new JLabel("영어");
+		mathL=new JLabel("수학");
+		allLabel= new JLabel[]{ hakL,nameL, korL, engL, mathL };
+		//텍스트 필드 설정
+		hakT= new JTextField("",20);
+		nameT= new JTextField("",20);
+		korT= new JTextField("",20);
+		engT= new JTextField("",20);
+		mathT= new JTextField("",20);
+		allText = new JTextField[]{ hakT, nameT, korT, engT, mathT };
+		//패널에 라벨과 텍스트 필드 올리기
+		for(int i=0;i<leftP.length;i++){
+			leftP[i].add("West",allLabel[i]);
+			leftP[i].add("Center",allText[i]);
+		}
+		//프레임 위에 올리기
+		for(int i=0;i<5;i++){
+			center1.add(leftP[i]);
+		}
+		center.add(center1); center.add(scroll);
+		add(center);
+
+		//윈도우 창 설정
+		setBounds(300,500,600,300);
+		setVisible(true);
+		//버튼에 이벤트 설정
+		for(int i=0;i<allBtn.length;i++){
+			allBtn[i].addActionListener(this);
+		}
+
+		//이벤트
+		this.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){ System.exit(0); }
+		});
+		
+
+	}
+	@Override
+	public void actionPerformed(ActionEvent e){
+		if(e.getSource()==bt1){  //입력
+			JOptionPane.showConfirmDialog(StuForm.this,"정보를 입력합니다","정보", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+			si.insert();
+			for(int i=0;i<allText.length;i++){
+				allText[i].setText("");
+			}
+		} else if(e.getSource()==bt2){ //출력
+			model=si.outputModel(model);
+		} else if(e.getSource()==bt3){
+			String answer=JOptionPane.showInputDialog(this,"학번을 입력하세요");
+			if(answer!=null){
+				model=si.search(answer,model);
+			}
+		} else if(e.getSource()==bt4){  //검색
+			 model=si.to_desc(model);
+		} else if (e.getSource()==bt5){  //삭제
+			String answer=JOptionPane.showInputDialog(this,"삭제할 학번을 입력하세요");
+			if(answer!=null) model=si.delete(answer,model);
+		} else if (e.getSource()==bt6){  //파일 저장
+			si.save();
+		} else if (e.getSource()==bt7){  //파일 열기
+			model=si.load(model);
+		} 
+	}
+	public String getHak(){ return hakT.getText(); }
+	public String getName(){ return nameT.getText(); }
+	public int getKor(){ return Integer.parseInt(korT.getText()); }
+	public int getEng(){ return Integer.parseInt(engT.getText()); }
+	public int getMath(){ return Integer.parseInt(mathT.getText()); }
 }
