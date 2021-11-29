@@ -12,7 +12,9 @@ class StuImple implements Student
 	private StuDTO dto; 
 	private StuForm sf;
 	private ArrayList <StuDTO> li;  //추가된 데이터
+	private HashSet <StuDTO> hash;
 	private ArrayList <StuDTO> allList;
+	private HashSet <StuDTO> allHash;
 
 	public StuImple(StuForm sf){
 		this.sf=sf;
