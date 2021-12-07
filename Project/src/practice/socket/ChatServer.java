@@ -12,18 +12,6 @@ import java.net.Socket;
 
 import java.util.Vector;
 
-public class ChatServer {
-
-
-// TODO: handle exception
-
-			System.err.println("Error in CharServer");
-
-			e.printStackTrace();
-
-			System.exit(1);// 1은 비정상적인 종료
-
-		}
 
 		System.out.println("**************************");
 
