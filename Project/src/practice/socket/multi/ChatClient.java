@@ -8,7 +8,6 @@ public class ChatClient {
 	// 로그인 ID를 입력하세요 라는 다이얼로그 창을 띄움
 	
 	public static void main(String args[]) {
-		String id = getLogonID();
 		
 		try {
 			if(args.length == 0) {
