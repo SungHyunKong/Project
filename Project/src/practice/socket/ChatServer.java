@@ -12,6 +12,33 @@ import java.net.Socket;
 
 import java.util.Vector;
 
+public class ChatServer {
+
+// B08ChatServer에서 소스를 좀 긁어왔다
+
+	Vector<ClientThread2> vc;// Clinet의 객체들을 저장한다.
+
+	public ChatServer() {
+
+		vc = new Vector<ClientThread2>();
+
+		ServerSocket server = null;
+
+		try {
+
+			server = new ServerSocket(7077);
+
+		} catch (Exception e) {
+
+// TODO: handle exception
+
+			System.err.println("Error in CharServer");
+
+			e.printStackTrace();
+
+			System.exit(1);// 1은 비정상적인 종료
+
+		}
 
 		System.out.println("**************************");
 
